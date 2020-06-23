@@ -148,6 +148,7 @@ function generateData(points, {a, b, c, d}) {
  * Very much based on https://github.com/tensorflow/tfjs-examples/blob/master/polynomial-regression-core/index.js
  */
 async function doALearning() {
+  document.querySelector('#iteration_counter').disabled = true;
   // Create an optimizer. This is the thing that does the learning.
   // 👉 you can play with these two numbers if you want to change the 
   // rate at which the algorithm is learning
@@ -247,6 +248,7 @@ async function doALearning() {
       await tf.nextFrame();
     }
     document.querySelector('#iteration_counter').innerHTML = "Learn!"
+    document.querySelector('#iteration_counter').disabled = false;
   }
   
   /*
