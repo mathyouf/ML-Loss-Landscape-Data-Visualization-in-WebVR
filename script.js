@@ -156,7 +156,7 @@ async function doALearning() {
   const numIterations = parseInt(document.getElementById('iterations').value || 75);
   
   // How fast we are learning.
-  const learningRate = document.getElementById('learningrate').value||0.5;
+  const learningRate = document.getElementById('learningratevalue').value||0.5;
   
   /* 
     Docs: https://js.tensorflow.org/api/0.11.1/#train.sgd
@@ -176,32 +176,32 @@ async function doALearning() {
     let optimizer_input = document.getElementById('optimizervalue').value
     switch(optimizer_input){
       case "adam":
-        optimizer_output = tf.train.adam
+        optimizer_output = tf.train.adam(learningRate)
         break
       case "sgd":
-        optimizer_output = tf.train.sgd
+        optimizer_output = tf.train.sgd(learningRate)
         break
       case "adagrad":
-        optimizer_output = tf.train.adagrad
+        optimizer_output = tf.train.adagrad(learningRate)
         break
       case "adadelta":
-        optimizer_output = tf.train.adadelta
+        optimizer_output = tf.train.adadelta(learningRate)
         break
       case "adamax":
-        optimizer_output = tf.train.adamax
+        optimizer_output = tf.train.adamax(learningRate)
         break
       case "rmsprop":
-        optimizer_output = tf.train.rmsprop
+        optimizer_output = tf.train.rmsprop(learningRate)
         break
       case "momentum":
-        optimizer_output = tf.train.momentum
+        optimizer_output = tf.train.momentum(learningRate)
         break
     }
     return optimizer_output
   }
   
   const optimizer = getOptimizer()
-  
+    
   // Use the training data, and do numIteration passes over it. 
   await train(tf.tensor1d(Data.training.x), tf.tensor1d(Data.training.y), numIterations);
   
@@ -242,10 +242,11 @@ async function doALearning() {
         // to minimize this loss.
         return loss(pred, ys);
       });
-
+      document.querySelector('#iteration_counter').innerHTML = iter+1
       // Use tf.nextFrame to not block the browser.
       await tf.nextFrame();
     }
+    document.querySelector('#iteration_counter').innerHTML = "Learn!"
   }
   
   /*

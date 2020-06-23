@@ -78,8 +78,8 @@
         <input id="iterations" placeholder="75" value="75" type="number">
       </div>
       <div class="input-container">
-        <label for="learningrate">learning rate</label>
-        <input id="learningrate" placeholder="0.5" value="0.5" type="number">
+        <label for="learningratevalue">learning rate</label>
+        <input id="learningratevalue" placeholder="0.5" value="0.5" type="number">
       </div>
       <div class="input-container">
           <select id="optimizervalue" name="optimizervalue">
@@ -92,7 +92,7 @@
             <option value="momentum">momentum</option>
         </select>
       </div>
-      <button onclick="doALearning()">Learn!</button>
+      <button onclick="doALearning()" id="iteration_counter">Learn!</button>
     </div>
 
     <div id="graph"></div>
