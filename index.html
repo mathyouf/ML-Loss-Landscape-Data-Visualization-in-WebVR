@@ -81,9 +81,11 @@
         <label for="learningrate">learning rate</label>
         <input id="learningrate" placeholder="0.5" value="0.5" type="number">
       </div>
-      div class="input-container">
-        <label for="optimizer">learning rate</label>
-        <input id="learningrate" placeholder="0.5" value="0.5" type="number">
+      <div class="input-container">
+          <select id="optimizer" name="optimizer">
+            <option value="adam">adam</option>
+            <option value="sgd">sgd</option>
+          </select>
       </div>
       <button onclick="doALearning()">Learn!</button>
     </div>
