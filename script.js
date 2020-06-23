@@ -173,8 +173,31 @@ async function doALearning() {
   //   STOCHASTIC GRADIENT DESCENT IS TOO SLOW, WE WANT AN OPTIMIZER WITH MOMENTUM AND THE THING THAT CALCULATES THE MOVING DISCOUNTED AVERAGE OF THE SQUARE OF GRADIENTS (MORE INFO: THIS IS INTRODUCED BY RMSPROP, WHERE WE KEEP TRACK OF THE SQUARE OF GRADIENTS, DISCOUNTING AS WE MOVE THROUGH TIME, SO THAT IF WEVE RECENTLY MOVED A LOT IN ONE DIRECTION, WE DONT CONTINUE TO DO SO AS MUCH, BY DIVIDING BY THE ROOT OF THAT SQUARED CUMULATIVE VALUE. THE IDEA IS THAT WE MIGHT HAVE ALREADY EXPLORED A LOT IN THAT DIRECTION AND DONT WANT TO OVERSHOOT OR NEGLECT OTHER EXPLORATION OPTIONS)
   //   SO LET US USE ADAM, WHICH IS THE BEST OF BOTH WORLDS (https://www.youtube.com/watch?v=uVjRe8QXFHY)
   function getOptimizer(){
-    let optval = document.getElementById('optimizer').value
-    if(o)
+    let optimizer_input = document.getElementById('optimizervalue').value
+    switch(optimizer_input){
+      case "adam":
+        optimizer_output = tf.train.adam
+        break
+      case "sgd":
+        optimizer_output = tf.train.sgd
+        break
+      case "adagrad":
+        optimizer_output = tf.train.adagrad
+        break
+      case "adadelta":
+        optimizer_output = tf.train.adadelta
+        break
+      case "adamax":
+        optimizer_output = tf.train.adamax
+        break
+      case "rmsprop":
+        optimizer_output = tf.train.rmsprop
+        break
+      case "momentum":
+        optimizer_output = tf.train.momentum
+        break
+    }
+    return optimizer_output
   }
   
   const optimizer = getOptimizer()

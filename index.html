@@ -82,10 +82,15 @@
         <input id="learningrate" placeholder="0.5" value="0.5" type="number">
       </div>
       <div class="input-container">
-          <select id="optimizer" name="optimizer">
+          <select id="optimizervalue" name="optimizervalue">
             <option value="adam">adam</option>
             <option value="sgd">sgd</option>
-          </select>
+            <option value="adagrad">adagrad</option>
+            <option value="adadelta">adadelta</option>
+            <option value="adamax">adamax</option>
+            <option value="rmsprop">rmsprop</option>
+            <option value="momentum">momentum</option>
+        </select>
       </div>
       <button onclick="doALearning()">Learn!</button>
     </div>
