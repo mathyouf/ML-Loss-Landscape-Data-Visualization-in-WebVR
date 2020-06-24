@@ -99,11 +99,11 @@ function plot() {
 				xanchor:"left",
 				yanchor:"top",
 				y: 1,  //tbh i don't know what these numbers mean?!
-        x: 0,
+        x: 1,
 				orientation: "v"
 	  },
   };
-  Plotly.newPlot('graph', [trace1, trace2, trace3], layout, {displayModeBar: false});
+  Plotly.newPlot('graph', [trace1, trace2, trace3], layout, {displayModeBar: true});
 }  
 
 /*
@@ -118,7 +118,7 @@ function generateData(points, {a, b, c, d}) {
   // 🚨 This is super important! TensorFlow requires this
   // for the algorithm to work, and if you don't do this
   // you learn NaN for every coefficient.
-  const xs = tf.randomUniform([points], -1, 1);  // magic TF to give you points between [-1, 1]
+  const xs = tf.randomUniform([points], -3, 3);  // magic TF to give you points between [-1, 1]
   for (let i = 0; i < points; i++) {
     x[i] = xs.get(i);  // goes from a TF tensor (i.e. array) to a number.
   }
