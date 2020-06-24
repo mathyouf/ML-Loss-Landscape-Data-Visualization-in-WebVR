@@ -8,9 +8,46 @@
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@0.10.0"> </script>
     <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
     <script src="/vrscript.js" defer></script>
+    <link rel="stylesheet" href="/vrstyle.css" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Mono" rel="stylesheet">
   </head>  
   <body>
+    <div class="settings" id="demo-content">
+      <div class="input-container formula">
+        <b>Secret formula: </b>
+        <code>
+        <input id="i_a" placeholder="-0.8" value="-0.8" step="0.1" onchange="init()" type="number">*x<sup>3</sup> + 
+        <input id="i_b" placeholder="-0.2" value="-0.2" step="0.1" onchange="init()" type="number">*x<sup>2</sup> + 
+        <input id="i_c" placeholder="0.9" value="0.9" step="0.1" onchange="init()" type="number">*x + 
+        <input id="i_d" placeholder="0.5" value="0.5" step="0.1" onchange="init()" type="number"> 
+        </code>
+      </div>
+      <br>
+      <div class="input-container">
+        <label for="points">initial points</label>
+        <input id="points" placeholder="100" value="100" type="number" onchange="init()">
+      </div>
+      <div class="input-container">
+        <label for="iterations">iterations</label>
+        <input id="iterations" placeholder="75" value="75" type="number">
+      </div>
+      <div class="input-container">
+        <label for="learningratevalue">learning rate</label>
+        <input id="learningratevalue" placeholder="0.5" value="0.5" step="0.1" type="number">
+      </div>
+      <div class="input-container">
+          <select id="optimizervalue" name="optimizervalue">
+            <option value="adam">adam</option>
+            <option value="sgd">sgd</option>
+            <option value="adagrad">adagrad</option>
+            <option value="adadelta">adadelta</option>
+            <option value="adamax">adamax</option>
+            <option value="rmsprop">rmsprop</option>
+            <option value="momentum">momentum</option>
+        </select>
+      </div>
+      <button onclick="doALearning()" id="iteration_counter">Learn!</button>
+    </div>
     <a-scene>
       <a-sky color="#bfd3d4"></a-sky>
     </a-scene>

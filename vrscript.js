@@ -18,7 +18,8 @@ var equation = function(x,z,{a,b,c,d}){
 
 var generateData = function(points,weights) {
   let graphSize = points
-  let data = []
+  let xz = []
+  let y = []
   //z-axis
   for(let z=-graphSize;z<graphSize;z++){
     //x-axis
@@ -40,7 +41,14 @@ const c = tf.variable(tf.scalar(Math.random()));
 const d = tf.variable(tf.scalar(Math.random()));
 
 function init(){
-  Data.training = generateData()
+  NUM_POINTS = parseInt(document.getElementById('points').value || 100);
+  const defaultCoeffs = {
+    a: parseFloat(document.getElementById('i_a').value || -0.8),
+    b: parseFloat(document.getElementById('i_b').value || -0.2),
+    c: parseFloat(document.getElementById('i_c').value || 0.9),
+    d: parseFloat(document.getElementById('i_d').value || 0.5)
+  }
+  Data.training = generateData(NUM_POINTS, defaultCoeffs);
 }
 
 
