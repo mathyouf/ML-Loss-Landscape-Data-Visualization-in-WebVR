@@ -13,7 +13,15 @@ var fullColorHex = function(r,g,b) {
 };
 
 var generateData = function(points,{a,b,c,d}) {
-  
+  let graphSize = points
+  let data = []
+  //z-axis
+  for(let z=-graphSize;z<graphSize;z++){
+    //x-axis
+    for(let x=-graphSize;x<graphSize;x++){
+      
+    }
+  }
 }
 
 function init(){
@@ -22,17 +30,14 @@ function init(){
 
 
 function createGraph(){
-  let graphSize = 10
   let graph = document.createElement('a-entity')
-  //z-axis
-  for(let z=-graphSize;z<graphSize;z++){
-    //x-axis
-    for(let x=-graphSize;x<graphSize;x++){
+
       let point = document.createElement('a-sphere')
-      let normalizedHeight = parseInt(Math.sin(x+z)*z*x*255/200+128)
+      let normalizedHeight = parseInt(Math.sin(x+z)*255/2+128)
+
       point.setAttribute('scale', '0.1 0.1 0.1')
       point.setAttribute('color', fullColorHex(0,normalizedHeight,255-normalizedHeight))
-      point.setAttribute('position', {x: x, y: Math.sin(x+z)*z, z: z})
+      point.setAttribute('position', {x: x, y: x*x+x+z*z+z, z: z})
       graph.appendChild(point)
     }
   }
