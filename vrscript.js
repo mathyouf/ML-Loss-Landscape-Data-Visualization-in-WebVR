@@ -25,11 +25,20 @@ var generateData = function(graphSize,weights) {
     xz[i] = [xs.get(i),zs.get(i)];  // goes from a TF tensor (i.e. array) to a number.
   }
   //z-axis
-  for(let z=-graphSize;z<graphSize;z++){
-    //x-axis
-    for(let x=-graphSize;x<graphSize;x++){
-      data.push([x,equation(x,z,weights),z])
-    }
+  for(let i=0;i<xz.length;i++){
+    let x = xz[i][0]
+    let z = xz[i][1]
+    y[i] = a * x*x + b * x + c * z*z + d * z
+  }
+  
+  // Normalize the y values to be between 0 and 1
+  const ymin = Math.min(...y);
+  const ymax = Math.max(...y);
+  const yrange = ymax - ymin;
+  
+  for (let i = 0; i < points; i++) {
+    const val = y[i];
+    y[i] = (y[i] - ymin) / yrange;
   }
 }
 
