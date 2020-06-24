@@ -12,35 +12,46 @@ var fullColorHex = function(r,g,b) {
   return '#'+red+green+blue;
 };
 
-var generateData = function(points,{a,b,c,d}) {
+var equation = function(x,z,{a,b,c,d}){
+  return (x*x*a + x*b + z*z*c + z*d)
+}
+
+var generateData = function(points,weights) {
   let graphSize = points
   let data = []
   //z-axis
   for(let z=-graphSize;z<graphSize;z++){
     //x-axis
     for(let x=-graphSize;x<graphSize;x++){
-      
+      data.push([x,equation(x,z,weights),z])
     }
   }
 }
 
+const Data = {
+  training: {xz:[], y:[]},   // the initial data set we're given
+  prediction: {xz:[], y:[]}, // what we're predicting based on the coefficients
+  learning: {xz:[], y:[]}    // what we're predicting while learning.
+}
+
+const a = tf.variable(tf.scalar(Math.random()));
+const b = tf.variable(tf.scalar(Math.random()));
+const c = tf.variable(tf.scalar(Math.random()));
+const d = tf.variable(tf.scalar(Math.random()));
+
 function init(){
-  createGraph()
+  Data.training = generateData()
 }
 
 
 function createGraph(){
   let graph = document.createElement('a-entity')
-
-      let point = document.createElement('a-sphere')
-      let normalizedHeight = parseInt(Math.sin(x+z)*255/2+128)
-
-      point.setAttribute('scale', '0.1 0.1 0.1')
-      point.setAttribute('color', fullColorHex(0,normalizedHeight,255-normalizedHeight))
-      point.setAttribute('position', {x: x, y: x*x+x+z*z+z, z: z})
-      graph.appendChild(point)
-    }
-  }
+  let point = document.createElement('a-sphere')
+  let normalizedHeight = parseInt(Math.sin(x+z)*255/2+128)
+  point.setAttribute('scale', '0.1 0.1 0.1')
+  point.setAttribute('color', fullColorHex(0,normalizedHeight,255-normalizedHeight))
+  point.setAttribute('position', {x: x, y: x*x+x+z*z+z, z: z})
+  graph.appendChild(point)
   graph.setAttribute('position', {x: 0, y: -10, z: -10})
   document.querySelector('a-scene').appendChild(graph)
 }
