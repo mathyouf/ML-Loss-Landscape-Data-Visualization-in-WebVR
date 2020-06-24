@@ -12,7 +12,7 @@ var fullColorHex = function(r,g,b) {
   return '#'+red+green+blue;
 };
 
-var generateData = function(points,) {
+var generateData = function(points,{a,b,c,d}) {
   
 }
 
