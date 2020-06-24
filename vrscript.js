@@ -16,10 +16,14 @@ var equation = function(x,z,{a,b,c,d}){
   return (x*x*a + x*b + z*z*c + z*d)
 }
 
-var generateData = function(points,weights) {
-  let graphSize = points
+var generateData = function(graphSize,weights) {
   let xz = []
   let y = []
+  const xs = tf.randomUniform([graphSize], -1, 1);
+  const zs = tf.randomUniform([graphSize], -1, 1);
+  for (let i = 0; i < graphSize; i++) {
+    xz[i] = [xs.get(i),zs.get(i)];  // goes from a TF tensor (i.e. array) to a number.
+  }
   //z-axis
   for(let z=-graphSize;z<graphSize;z++){
     //x-axis
