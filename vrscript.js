@@ -70,12 +70,11 @@ function createGraph(data){
   for(let i=0;i<data.xz.length;i++){
     let point = document.createElement('a-sphere')
     point.setAttribute('scale', '0.1 0.1 0.1')
-    point.setAttribute('color', fullColorHex(0,255,0))
-    console.log(data[i])
+    point.setAttribute('color', fullColorHex(0,0,0))
     point.setAttribute('position', {x: data.xz[i][0], y: data.y[i], z: data.xz[i][1]})
     graph.appendChild(point)
   }
-  graph.setAttribute('position', {x: 0, y: -10, z: -10})
+  graph.setAttribute('position', {x: 0, y: -1.5, z: -4})
   document.querySelector('a-scene').appendChild(graph)
 }
 
