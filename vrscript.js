@@ -26,5 +26,5 @@ for(let z=-graphSize;z<graphSize;z++){
     graph.appendChild(point)
   }
 }
-graph.setAttribute('position', {x: 0, y: 0, z: -10})
+graph.setAttribute('position', {x: 0, y: -10, z: -10})
 document.querySelector('a-scene').appendChild(graph)
