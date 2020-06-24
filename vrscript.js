@@ -12,19 +12,27 @@ var fullColorHex = function(r,g,b) {
   return '#'+red+green+blue;
 };
 
-let graphSize = 10
-let graph = document.createElement('a-entity')
-//z-axis
-for(let z=-graphSize;z<graphSize;z++){
-  //x-axis
-  for(let x=-graphSize;x<graphSize;x++){
-    let point = document.createElement('a-sphere')
-    let normalizedHeight = parseInt(Math.sin(x+z)*255/2+128)
-    point.setAttribute('scale', '0.1 0.1 0.1')
-    point.setAttribute('color', fullColorHex(normalizedHeight,0,111))
-    point.setAttribute('position', {x: x, y: Math.sin(x+z), z: z})
-    graph.appendChild(point)
-  }
+function init(){
+  createGraph()
 }
-graph.setAttribute('position', {x: 0, y: -10, z: -10})
-document.querySelector('a-scene').appendChild(graph)
+
+function createGraph(){
+  let graphSize = 10
+  let graph = document.createElement('a-entity')
+  //z-axis
+  for(let z=-graphSize;z<graphSize;z++){
+    //x-axis
+    for(let x=-graphSize;x<graphSize;x++){
+      let point = document.createElement('a-sphere')
+      let normalizedHeight = parseInt(Math.sin(x+z)*255/2+128)
+      point.setAttribute('scale', '0.1 0.1 0.1')
+      point.setAttribute('color', fullColorHex(0,normalizedHeight,255-normalizedHeight))
+      point.setAttribute('position', {x: x, y: Math.sin(x+z), z: z})
+      graph.appendChild(point)
+    }
+  }
+  graph.setAttribute('position', {x: 0, y: -10, z: -10})
+  document.querySelector('a-scene').appendChild(graph)
+}
+
+init()
