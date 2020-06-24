@@ -1,4 +1,9 @@
-var fullColorHex = function(r,g,b) {   
+var fullColorHex = function(r,g,b) {
+  let lower = 0
+  let upper = 255
+  r = clamp(r, lower, upper)
+  g = clamp(g, lower, upper)
+  b = clamp(b, lower, upper)
   var rgbToHex = function (rgb) { 
     var hex = Number(rgb).toString(16);
     if (hex.length < 2) {
@@ -11,6 +16,10 @@ var fullColorHex = function(r,g,b) {
   var blue = rgbToHex(b);
   return '#'+red+green+blue;
 };
+
+function clamp(val, min, max) {
+    return val > max ? max : val < min ? min : val;
+}
 
 var generateData = function(graphSize,{a,b,c,d}) {
   let xz = []
@@ -70,7 +79,7 @@ function createGraph(data){
   for(let i=0;i<data.xz.length;i++){
     let point = document.createElement('a-sphere')
     point.setAttribute('scale', '0.1 0.1 0.1')
-    point.setAttribute('color', fullColorHex(0,0,0))
+    point.setAttribute('color', fullColorHex(data.y[i]*128+128,0,0))
     point.setAttribute('position', {x: data.xz[i][0], y: data.y[i], z: data.xz[i][1]})
     graph.appendChild(point)
   }
