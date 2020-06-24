@@ -19,10 +19,10 @@ for(let z=-graphSize;z<graphSize;z++){
   //x-axis
   for(let x=-graphSize;x<graphSize;x++){
     let point = document.createElement('a-sphere')
-    let normalizedHeight = parseInt(Math.sin(x*z)*255/2+128)
+    let normalizedHeight = parseInt(Math.sin(x+z)*255/2+128)
     point.setAttribute('scale', '0.1 0.1 0.1')
     point.setAttribute('color', fullColorHex(normalizedHeight,0,111))
-    point.setAttribute('position', {x: x, y: Math.sin(x*z), z: z})
+    point.setAttribute('position', {x: x, y: Math.sin(x+z), z: z})
     graph.appendChild(point)
   }
 }
