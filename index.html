@@ -5,90 +5,18 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@0.10.0"> </script>
-    <script src="/script.js" defer></script>
-    <link rel="stylesheet" href="/style.css" type="text/css">
+    <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
+    <script src="/vrscript.js" defer></script>
     <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Mono" rel="stylesheet">
   </head>  
   <body>
-    <header><h1>A-frame Tensorflow <div class="glitchButton"></div></h1></header>
-    <div class="settings" id="demo-content">
-      
-      <div class="input-container formula">
-        <b>Secret formula: </b>
-        <code>
-        <input id="i_a" placeholder="-0.8" value="-0.8" step="0.1" onchange="init()" type="number">*x<sup>3</sup> + 
-        <input id="i_b" placeholder="-0.2" value="-0.2" step="0.1" onchange="init()" type="number">*x<sup>2</sup> + 
-        <input id="i_c" placeholder="0.9" value="0.9" step="0.1" onchange="init()" type="number">*x + 
-        <input id="i_d" placeholder="0.5" value="0.5" step="0.1" onchange="init()" type="number"> 
-        </code>
-      </div>
-      <br>
-      <div class="input-container">
-        <label for="points">initial points</label>
-        <input id="points" placeholder="100" value="100" type="number" onchange="init()">
-      </div>
-      <div class="input-container">
-        <label for="iterations">iterations</label>
-        <input id="iterations" placeholder="75" value="75" type="number">
-      </div>
-      <div class="input-container">
-        <label for="learningratevalue">learning rate</label>
-        <input id="learningratevalue" placeholder="0.5" value="0.5" step="0.1" type="number">
-      </div>
-      <div class="input-container">
-          <select id="optimizervalue" name="optimizervalue">
-            <option value="adam">adam</option>
-            <option value="sgd">sgd</option>
-            <option value="adagrad">adagrad</option>
-            <option value="adadelta">adadelta</option>
-            <option value="adamax">adamax</option>
-            <option value="rmsprop">rmsprop</option>
-            <option value="momentum">momentum</option>
-        </select>
-      </div>
-      <button onclick="doALearning()" id="iteration_counter">Learn!</button>
-    </div>
-
-    <div id="graph"></div>
-    
-    <h2>How this works</h2>
-      <p>
-        Most machine learning algorithms follow this pattern:
-        <ol>
-          <li>We have to figure out the <b>"features"</b> of the secret formula that generated the data we were given, so that we 
-          can learn them. In my opinion, this is like 80% of the complexity of solving an ML problem. In this example, we were told the 
-            shape of the secret formula (it's a cubic!), so the features we have to learn are the coefficients in the polynomial. For something more 
-          complex like the "is this a dog or a blueberry muffin" problem, we'd have to look at pixels and colours and formations and what
-          makes a dog a dog and not a muffin.</li>
-          <li>Once we figure out these features (in our case, those <code>a,b,c,d</code> coefficients), we initialize them to some 
-            random values. We could now use them to make 
-          predictions, but they would be teeeeeerrible because they're just random.</li>
-          <li>(I'm just going to use our actual example from now on and 
-          not dogs)</li>
-          <li>We start looking at every piece <code>(x,y)</code> of training data we were given. We take the <code>x</code> value, and based on
-            these coefficients we have estimated, we predict what the <code>y</code> value would be. We then look at the correct 
-            <code>y</code> value from the original training data, calculate the difference between the two, and then adjust our coefficients 
-            so that our predicted value gets closer to the correct one. </li>
-          <li>(this, with more math sprinkled in is called "stochastic gradient descent". "Stochastic" means probabilistic, and 
-          "gradient descent" should make you think of walking down a hill, towards a sink hole -- the higher the hill, the bigger the 
-            prediction error, which is why you want to descend towards the error-free hole.)</li>
-          <li>This part of code is actually pretty messy (because matrices and derivatives), and TensorFlow does this for us!</li>
-          <li>We keep doing this until we use up all the data, and then repeat the entire process so that we iterate over the same data over 
-            and over again until at the end we've pretty much learnt the coefficients!</li>
-        </ol>
-      </p>
-
-    <h2>The code</h2>
-    <p>You can look at the code for the demo <a href="https://glitch.com/edit/#!/hello-tensorflow?path=script.js:95:10">here on Glitch</a>. I tried to comment
-      most lines of the code with either what the algorithm or TensorFlow are doing (especially when
-      TensorFlow is actually doing a looooot of heavy lifting behind the scenes). I hope it helps!</p>
-
-    <script src="https://button.glitch.me/button.js"></script>
-
-    <div class="footer">
-      made by <a href="https://twitter.com/notwaldorf">monica</a>, finally putting her degree to use.
-    </div>
+    <a-scene>
+      <a-box position="-1 0.5 -3" rotation="0 45 0" color="#4CC3D9"></a-box>
+      <a-sphere position="0 1.25 -5" radius="1.25" color="#EF2D5E"></a-sphere>
+      <a-cylinder position="1 0.75 -3" radius="0.5" height="1.5" color="#FFC65D"></a-cylinder>
+      <a-plane position="0 0 -4" rotation="-90 0 0" width="4" height="4" color="#7BC8A4"></a-plane>
+      <a-sky color="#ECECEC"></a-sky>
+    </a-scene>
   </body>
 </html>
