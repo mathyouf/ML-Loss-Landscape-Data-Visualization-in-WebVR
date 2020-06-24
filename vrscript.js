@@ -12,11 +12,7 @@ var fullColorHex = function(r,g,b) {
   return '#'+red+green+blue;
 };
 
-var equation = function(x,z,{a,b,c,d}){
-  return (x*x*a + x*b + z*z*c + z*d)
-}
-
-var generateData = function(graphSize,weights) {
+var generateData = function(graphSize,{a,b,c,d}) {
   let xz = []
   let y = []
   const xs = tf.randomUniform([graphSize], -1, 1);
@@ -28,8 +24,9 @@ var generateData = function(graphSize,weights) {
   for(let i=0;i<xz.length;i++){
     let x = xz[i][0]
     let z = xz[i][1]
-    y[i] = a * x*x + b * x + c * z*z + d * z
+    y[i] = (a * x*x + b * x + c * z*z + d * z)
   }
+  
   
   // Normalize the y values to be between 0 and 1
   const ymin = Math.min(...y);
@@ -40,6 +37,8 @@ var generateData = function(graphSize,weights) {
     const val = y[i];
     y[i] = (y[i] - ymin) / yrange;
   }
+  
+  return {xz:xz,y:y}
 }
 
 const Data = {
@@ -62,17 +61,20 @@ function init(){
     d: parseFloat(document.getElementById('i_d').value || 0.5)
   }
   Data.training = generateData(NUM_POINTS, defaultCoeffs);
+  createGraph(Data.training)
 }
 
 
-function createGraph(){
+function createGraph(data){
   let graph = document.createElement('a-entity')
-  let point = document.createElement('a-sphere')
-  let normalizedHeight = parseInt(Math.sin(x+z)*255/2+128)
-  point.setAttribute('scale', '0.1 0.1 0.1')
-  point.setAttribute('color', fullColorHex(0,normalizedHeight,255-normalizedHeight))
-  point.setAttribute('position', {x: x, y: x*x+x+z*z+z, z: z})
-  graph.appendChild(point)
+  for(let i=0;i<data.xz.length;i++){
+    let point = document.createElement('a-sphere')
+    point.setAttribute('scale', '0.1 0.1 0.1')
+    point.setAttribute('color', fullColorHex(0,255,0))
+    console.log(data[i])
+    point.setAttribute('position', {x: data.xz[i][0], y: data.y[i], z: data.xz[i][1]})
+    graph.appendChild(point)
+  }
   graph.setAttribute('position', {x: 0, y: -10, z: -10})
   document.querySelector('a-scene').appendChild(graph)
 }
