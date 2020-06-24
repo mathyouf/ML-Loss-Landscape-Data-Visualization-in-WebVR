@@ -18,7 +18,7 @@ var fullColorHex = function(r,g,b) {
 };
 
 function clamp(val, min, max) {
-    return val > max ? max : val < min ? min : val;
+    return parseInt(val > max ? max : val < min ? min : val);
 }
 
 var generateData = function(graphSize,{a,b,c,d}) {
@@ -75,16 +75,20 @@ function init(){
 
 
 function createGraph(data){
+  let oldgraph = document.querySelector('.graph')
+  document.querySelector('a-scene').removeChild(oldgraph)
   let graph = document.createElement('a-entity')
   for(let i=0;i<data.xz.length;i++){
     let point = document.createElement('a-sphere')
     point.setAttribute('scale', '0.1 0.1 0.1')
-    point.setAttribute('color', fullColorHex(data.y[i]*128+128,0,0))
+    point.setAttribute('color', fullColorHex(data.y[i]*128+128,-data.y[i]*33+66,0))
     point.setAttribute('position', {x: data.xz[i][0], y: data.y[i], z: data.xz[i][1]})
     graph.appendChild(point)
   }
   graph.setAttribute('position', {x: 0, y: -1.5, z: -4})
+  graph.setAttribute('rotation', {x: 0, y: 90, z: 0})
   document.querySelector('a-scene').appendChild(graph)
+  graph.classList.add('graph')
 }
 
 init()
