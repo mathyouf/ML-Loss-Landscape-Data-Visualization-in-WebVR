@@ -70,25 +70,38 @@ function init(){
     d: parseFloat(document.getElementById('i_d').value || 0.5)
   }
   Data.training = generateData(NUM_POINTS, defaultCoeffs);
-  createGraph(Data.training)
+  const coeff = {
+    a: a.dataSync()[0],
+    b: b.dataSync()[0],
+    c: c.dataSync()[0],
+    d: d.dataSync()[0],
+  };
+  Data.prediction = generateData(NUM_POINTS, coeff);
+  createGraph(Data.training, "train")
+  createGraph(Data.prediction, "predict")
 }
 
 
-function createGraph(data){
-  let oldgraph = document.querySelector('.graph')
+function createGraph(data,set){
+  let oldgraph = document.querySelector('.graph'+set)
   document.querySelector('a-scene').removeChild(oldgraph)
   let graph = document.createElement('a-entity')
   for(let i=0;i<data.xz.length;i++){
     let point = document.createElement('a-sphere')
     point.setAttribute('scale', '0.1 0.1 0.1')
-    point.setAttribute('color', fullColorHex(data.y[i]*128+128,-data.y[i]*33+66,0))
+    if(set=="train"){
+      point.setAttribute('color', fullColorHex(data.y[i]*128+128,-data.y[i]*33+66,0))
+    } else if(set=="predict"){
+      point.setAttribute('color', fullColorHex(data.y[i]*128+128,-data.y[i]*33+66,0))
+      point.setAttribute('blending', 'subtractive')
+    }
     point.setAttribute('position', {x: data.xz[i][0], y: data.y[i], z: data.xz[i][1]})
     graph.appendChild(point)
   }
   graph.setAttribute('position', {x: 0, y: 0, z: 0})
   graph.setAttribute('rotation', {x: 0, y: 90, z: 0})
   document.querySelector('a-scene').appendChild(graph)
-  graph.classList.add('graph')
+  graph.classList.add('graph'+set)
 }
 
 init()
