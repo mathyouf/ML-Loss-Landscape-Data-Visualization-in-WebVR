@@ -163,7 +163,7 @@ async function doALearning() {
   const optimizer = getOptimizer()
     
   // Use the training data, and do numIteration passes over it. 
-  await train(tf.tensor1d(Data.training.x), tf.tensor1d(Data.training.y), numIterations);
+  await train(tf.tensor2d(Data.training.xz), tf.tensor1d(Data.training.y), numIterations);
   
   // Once that is done, this has updated our coefficients! 
   // Here you could see what our predictions look like now, and use them!
@@ -180,7 +180,8 @@ async function doALearning() {
   /*
    * This does the training of the model.
    */
-  async function train(xs, ys, numIterations) {
+  async function train(xzs, ys, numIterations) {
+    console.log(xzs)
     for (let iter = 0; iter < numIterations; iter++) {
       // Plot where we are at this step.
       const coeff = {
@@ -189,13 +190,14 @@ async function doALearning() {
         c: c.dataSync()[0],
         d: d.dataSync()[0],
       };
-      Data.learning = generateData(NUM_POINTS, coeff);
-      plot();
+      Data.prediction = generateData(NUM_POINTS, coeff);
+      createGraph(Data.prediction, "predict")
+
   
       // Learn! This is where the step happens, and when the training takes place.
       optimizer.minimize(() => {
         // Using our estimated coeff, predict all the ys for all the xs 
-        const pred = predict(xs);
+        const pred = predict(xzs);
         
         // Need to return the loss i.e how bad is our prediction from the 
         // correct answer. The optimizer will then adjust the coefficients
@@ -213,14 +215,14 @@ async function doALearning() {
   /*
    * Predicts all the y values for all the x values.
    */
-  function predict(x) {
+  function predict(xz) {
     // Calculate a y according to the formula
     // y = a * x ^ 3 + b * x ^ 2 + c * x + d
     // where a, b, c, d are the coefficients we have currently calculated.
     return tf.tidy(() => {
-      return a.mul(x.pow(tf.scalar(3, 'int32')))
-        .add(b.mul(x.square()))
-        .add(c.mul(x))
+      return a.mul(xz.square())
+        .add(b.mul(xz.square()))
+        .add(c.mul(xz))
         .add(d);
     });
   }
