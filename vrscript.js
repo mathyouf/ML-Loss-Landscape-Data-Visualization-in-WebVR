@@ -22,17 +22,19 @@ function clamp(val, min, max) {
 }
 
 var generateData = function(graphSize,{a,b,c,d}) {
-  let xz = []
+  let x = []
+  let z = []
   let y = []
   const xs = tf.randomUniform([graphSize], -1, 1);
   const zs = tf.randomUniform([graphSize], -1, 1);
   for (let i = 0; i < graphSize; i++) {
-    xz[i] = [xs.get(i),zs.get(i)];  // goes from a TF tensor (i.e. array) to a number.
+    x[i] = xs.get(i);  // goes from a TF tensor (i.e. array) to a number.
+    z[i] = zs.get(i);
   }
   //z-axis
-  for(let i=0;i<xz.length;i++){
-    let x = xz[i][0]
-    let z = xz[i][1]
+  for(let i=0;i<x.length;i++){
+    let x = x[i]
+    let z = z[i]
     y[i] = (a * x*x + b * x + c * z*z + d * z)
   }
   
@@ -47,13 +49,13 @@ var generateData = function(graphSize,{a,b,c,d}) {
     y[i] = (y[i] - ymin) / yrange;
   }
   
-  return {xz:xz,y:y}
+  return {x:x, z:z, y:y}
 }
 
 const Data = {
-  training: {xz:[], y:[]},   // the initial data set we're given
-  prediction: {xz:[], y:[]}, // what we're predicting based on the coefficients
-  learning: {xz:[], y:[]}    // what we're predicting while learning.
+  training: {x:[], z:[], y:[]},   // the initial data set we're given
+  prediction: {x:[], z:[], y:[]}, // what we're predicting based on the coefficients
+  learning: {x:[], z:[], y:[]}    // what we're predicting while learning.
 }
 
 const a = tf.variable(tf.scalar(Math.random()));
@@ -86,7 +88,7 @@ function createGraph(data,set){
   let oldgraph = document.querySelector('.graph'+set)
   document.querySelector('a-scene').removeChild(oldgraph)
   let graph = document.createElement('a-entity')
-  for(let i=0;i<data.xz.length;i++){
+  for(let i=0;i<data.x.length;i++){
     let point = document.createElement('a-sphere')
     point.setAttribute('scale', '0.1 0.1 0.1')
     if(set=="train"){
@@ -95,7 +97,7 @@ function createGraph(data,set){
       point.setAttribute('color', fullColorHex(data.y[i]*128+128,-data.y[i]*33+66,0))
       point.setAttribute('blending', 'subtractive')
     }
-    point.setAttribute('position', {x: data.xz[i][0], y: data.y[i], z: data.xz[i][1]})
+    point.setAttribute('position', {x: data.x[i], y: data.y[i], z: data.z[i]})
     graph.appendChild(point)
   }
   graph.setAttribute('position', {x: 0, y: 0, z: 0})
@@ -163,7 +165,7 @@ async function doALearning() {
   const optimizer = getOptimizer()
     
   // Use the training data, and do numIteration passes over it. 
-  await train(tf.tensor2d(Data.training.xz), tf.tensor1d(Data.training.y), numIterations);
+  await train(tf.tensor1d(Data.training.x), tf.tensor1d(Data.training.z), tf.tensor1d(Data.training.y), numIterations);
   
   // Once that is done, this has updated our coefficients! 
   // Here you could see what our predictions look like now, and use them!
@@ -180,8 +182,8 @@ async function doALearning() {
   /*
    * This does the training of the model.
    */
-  async function train(xzs, ys, numIterations) {
-    console.log(xzs)
+  async function train(xs, zs, ys, numIterations) {
+    console.log(xs.print(),zs.print())
     for (let iter = 0; iter < numIterations; iter++) {
       // Plot where we are at this step.
       const coeff = {
@@ -197,7 +199,7 @@ async function doALearning() {
       // Learn! This is where the step happens, and when the training takes place.
       optimizer.minimize(() => {
         // Using our estimated coeff, predict all the ys for all the xs 
-        const pred = predict(xzs);
+        const pred = predict(xs, zs);
         
         // Need to return the loss i.e how bad is our prediction from the 
         // correct answer. The optimizer will then adjust the coefficients
@@ -213,17 +215,17 @@ async function doALearning() {
   }
   
   /*
-   * Predicts all the y values for all the x values.
+   * Predicts all the y values for all the x and z values.
    */
-  function predict(xz) {
+  function predict(x,z) {
     // Calculate a y according to the formula
     // y = a * x ^ 3 + b * x ^ 2 + c * x + d
     // where a, b, c, d are the coefficients we have currently calculated.
     return tf.tidy(() => {
-      return a.mul(xz.square())
-        .add(b.mul(xz.square()))
-        .add(c.mul(xz))
-        .add(d);
+      return a.mul(x.square())
+        .add(b.mul(x))
+        .add(c.mul(z.square()))
+        .add(d.mul(z))
     });
   }
   
