@@ -92,3 +92,139 @@ function createGraph(data){
 }
 
 init()
+
+async function doALearning() {
+  document.querySelector('#iteration_counter').disabled = true;
+  // Create an optimizer. This is the thing that does the learning.
+  // 👉 you can play with these two numbers if you want to change the 
+  // rate at which the algorithm is learning
+  
+  // How many passes through the data we're doing.
+  const numIterations = parseInt(document.getElementById('iterations').value || 75);
+  
+  // How fast we are learning.
+  const learningRate = document.getElementById('learningratevalue').value||0.5;
+  
+  /* 
+    Docs: https://js.tensorflow.org/api/0.11.1/#train.sgd
+    - sgd means "stochastic gradient descent". 
+    - stochastic means "probabilistic"
+    - gradient descent means that at every step, we move our predictions 
+    in the direction of the answer. How much to move involves derivatives (the "gradient")
+    - the full algorithm is here but it's...mathy: https://en.wikipedia.org/wiki/Stochastic_gradient_descent
+    - this is why having tensorflow is good!!
+  */ 
+  // const optimizer = tf.train.sgd(learningRate);
+  
+  //   YO YO IT'S MATT! FIRST COMMENT OF MY OWN.
+  //   STOCHASTIC GRADIENT DESCENT IS TOO SLOW, WE WANT AN OPTIMIZER WITH MOMENTUM AND THE THING THAT CALCULATES THE MOVING DISCOUNTED AVERAGE OF THE SQUARE OF GRADIENTS (MORE INFO: THIS IS INTRODUCED BY RMSPROP, WHERE WE KEEP TRACK OF THE SQUARE OF GRADIENTS, DISCOUNTING AS WE MOVE THROUGH TIME, SO THAT IF WEVE RECENTLY MOVED A LOT IN ONE DIRECTION, WE DONT CONTINUE TO DO SO AS MUCH, BY DIVIDING BY THE ROOT OF THAT SQUARED CUMULATIVE VALUE. THE IDEA IS THAT WE MIGHT HAVE ALREADY EXPLORED A LOT IN THAT DIRECTION AND DONT WANT TO OVERSHOOT OR NEGLECT OTHER EXPLORATION OPTIONS)
+  //   SO LET US USE ADAM, WHICH IS THE BEST OF BOTH WORLDS (https://www.youtube.com/watch?v=uVjRe8QXFHY)
+  function getOptimizer(){
+    let optimizer_input = document.getElementById('optimizervalue').value
+    switch(optimizer_input){
+      case "adam":
+        optimizer_output = tf.train.adam(learningRate)
+        break
+      case "sgd":
+        optimizer_output = tf.train.sgd(learningRate)
+        break
+      case "adagrad":
+        optimizer_output = tf.train.adagrad(learningRate)
+        break
+      case "adadelta":
+        optimizer_output = tf.train.adadelta(learningRate)
+        break
+      case "adamax":
+        optimizer_output = tf.train.adamax(learningRate)
+        break
+      case "rmsprop":
+        optimizer_output = tf.train.rmsprop(learningRate)
+        break
+      case "momentum":
+        optimizer_output = tf.train.momentum(learningRate)
+        break
+    }
+    return optimizer_output
+  }
+  
+  const optimizer = getOptimizer()
+    
+  // Use the training data, and do numIteration passes over it. 
+  await train(tf.tensor1d(Data.training.x), tf.tensor1d(Data.training.y), numIterations);
+  
+  // Once that is done, this has updated our coefficients! 
+  // Here you could see what our predictions look like now, and use them!
+  // Example:
+  // const coeff = {
+  //   a: a.dataSync()[0],
+  //   b: b.dataSync()[0],
+  //   c: c.dataSync()[0],
+  //   d: d.dataSync()[0],
+  // };
+  // Data.prediction = generateData(NUM_POINTS, coeff);
+  // plot();
+  
+  /*
+   * This does the training of the model.
+   */
+  async function train(xs, ys, numIterations) {
+    for (let iter = 0; iter < numIterations; iter++) {
+      // Plot where we are at this step.
+      const coeff = {
+        a: a.dataSync()[0],
+        b: b.dataSync()[0],
+        c: c.dataSync()[0],
+        d: d.dataSync()[0],
+      };
+      Data.learning = generateData(NUM_POINTS, coeff);
+      plot();
+  
+      // Learn! This is where the step happens, and when the training takes place.
+      optimizer.minimize(() => {
+        // Using our estimated coeff, predict all the ys for all the xs 
+        const pred = predict(xs);
+        
+        // Need to return the loss i.e how bad is our prediction from the 
+        // correct answer. The optimizer will then adjust the coefficients
+        // to minimize this loss.
+        return loss(pred, ys);
+      });
+      document.querySelector('#iteration_counter').innerHTML = iter+1
+      // Use tf.nextFrame to not block the browser.
+      await tf.nextFrame();
+    }
+    document.querySelector('#iteration_counter').innerHTML = "Learn!"
+    document.querySelector('#iteration_counter').disabled = false;
+  }
+  
+  /*
+   * Predicts all the y values for all the x values.
+   */
+  function predict(x) {
+    // Calculate a y according to the formula
+    // y = a * x ^ 3 + b * x ^ 2 + c * x + d
+    // where a, b, c, d are the coefficients we have currently calculated.
+    return tf.tidy(() => {
+      return a.mul(x.pow(tf.scalar(3, 'int32')))
+        .add(b.mul(x.square()))
+        .add(c.mul(x))
+        .add(d);
+    });
+  }
+  
+  /*
+   * Loss function: how good the prediction is based on what you expected.
+   */
+  function loss(prediction, labels) {
+    // This is the mean squared error between the prediction and the correct answer
+    // If you had n data points (NUM_POINTS = n) then it would be:
+    // error = 1/n * ( (prediction_1 - answer_1)^2 + ... + (prediction_n - answer_n)^2  )
+    // see https://en.wikipedia.org/wiki/Mean_squared_error.
+    // There are other error functions you could use, but if you're doing numeric things,
+    // MSE is one of the best and also the easiest.
+    
+    // Also, this is also why TensorFlow is great! Doing this by hand sucks!
+    const error = prediction.sub(labels).square().mean();
+    return error;
+  }
+}
