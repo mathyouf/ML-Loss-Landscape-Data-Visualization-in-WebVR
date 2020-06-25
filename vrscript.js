@@ -85,7 +85,7 @@ function createGraph(data){
     point.setAttribute('position', {x: data.xz[i][0], y: data.y[i], z: data.xz[i][1]})
     graph.appendChild(point)
   }
-  graph.setAttribute('position', {x: 0, y: -1.5, z: -4})
+  graph.setAttribute('position', {x: 0, y: 0, z: 0})
   graph.setAttribute('rotation', {x: 0, y: 90, z: 0})
   document.querySelector('a-scene').appendChild(graph)
   graph.classList.add('graph')
