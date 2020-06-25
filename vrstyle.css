@@ -100,3 +100,6 @@ button {
   z-index: 999;
   position: fixed;
 }
+#optimizervalue{
+  border-bottom: 2px solid #F06292;
+}

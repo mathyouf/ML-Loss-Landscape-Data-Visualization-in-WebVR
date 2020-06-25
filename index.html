@@ -37,14 +37,14 @@
         <input id="learningratevalue" placeholder="0.5" value="0.5" step="0.1" type="number">
       </div>
       <div class="input-container">
+          <label for="optimizervalue">optimizer</label>
           <select id="optimizervalue" name="optimizervalue">
-            <option value="adam">adam</option>
-            <option value="sgd">sgd</option>
-            <option value="adagrad">adagrad</option>
-            <option value="adadelta">adadelta</option>
-            <option value="adamax">adamax</option>
-            <option value="rmsprop">rmsprop</option>
-            <option value="momentum">momentum</option>
+            <option value="adam">Adam</option>
+            <option value="sgd">Gradient Descent</option>
+            <option value="adagrad">Adagrad</option>
+            <option value="adadelta">Adadelta</option>
+            <option value="adamax">Adamax</option>
+            <option value="rmsprop">RMSprop</option>
         </select>
       </div>
       <button onclick="doALearning()" id="iteration_counter">Learn!</button>
