@@ -94,6 +94,7 @@ function createGraph(data,set){
     } else if(set=="predict"){
       point.setAttribute('color', fullColorHex(data.y[i]*128+128,-data.y[i]*33+66,0))
       point.setAttribute('blending', 'subtractive')
+      point.setAttribute('opacity', '0.3')
     }
     point.setAttribute('position', {x: data.x[i], y: data.y[i], z: data.z[i]})
     graph.appendChild(point)
