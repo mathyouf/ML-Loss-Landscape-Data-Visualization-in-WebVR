@@ -33,9 +33,7 @@ var generateData = function(graphSize,{a,b,c,d}) {
   }
   //z-axis
   for(let i=0;i<x.length;i++){
-    let x = x[i]
-    let z = z[i]
-    y[i] = (a * x*x + b * x + c * z*z + d * z)
+    y[i] = (a * x[i]*x[i] + b * x[i] + c * z[i]*z[i] + d * z[i])
   }
   
   
