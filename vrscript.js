@@ -203,7 +203,11 @@ async function doALearning() {
         // Need to return the loss i.e how bad is our prediction from the 
         // correct answer. The optimizer will then adjust the coefficients
         // to minimize this loss.
-        return loss(pred, ys);
+        let loss_value = loss(pred, ys)
+        if(loss_value.dataSync()[0]<0.001){
+          iter=numIterations
+        }
+        return loss_value;
       });
       document.querySelector('#iteration_counter').innerHTML = iter+1
       // Use tf.nextFrame to not block the browser.
@@ -241,8 +245,8 @@ async function doALearning() {
     
     // Also, this is also why TensorFlow is great! Doing this by hand sucks!
     const error = prediction.sub(labels).square().mean();
-    let errval = Number.parseFloat(error.dataSync()[0]*5).toPrecision(4)
-    document.querySelector('#loss').setAttribute('scale',  {x:1,y:errval,z:1})
+    // let errval = Number.parseFloat(error.dataSync()[0]*5).toPrecision(4)
+    // document.querySelector('#loss').setAttribute('scale',  {x:1,y:errval,z:1})
     return error;
   }
 }
