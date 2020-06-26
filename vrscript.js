@@ -241,7 +241,8 @@ async function doALearning() {
     
     // Also, this is also why TensorFlow is great! Doing this by hand sucks!
     const error = prediction.sub(labels).square().mean();
-    document.querySelector('#loss').setAttribute('scale',  Number.parseFloat(error.dataSync()[0]).toPrecision(4))
+    let errval = Number.parseFloat(error.dataSync()[0]*5).toPrecision(4)
+    document.querySelector('#loss').setAttribute('scale',  {x:1,y:errval,z:1})
     return error;
   }
 }
