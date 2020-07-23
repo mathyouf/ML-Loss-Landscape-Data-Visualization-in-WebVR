@@ -7,7 +7,17 @@ Inspired by the 2D [hello tensorflow](https://glitch.com/edit/#!/hello-tensorflo
 ## Features
 
 - Adjust each x and z values in plane constructed by `x + x^2 + z + z^2`
-- Choose among optimizers available in [Tensorflow.js](https://js.tensorflow.org/api/latest/#Training-Optimizers)
+- Set the number of points in each plane (more improves loss accuracy)
 - Set the learning rate
-- Set the number of points in each plane (more improves batch loss accuracy)
+- Choose among optimizers available in [Tensorflow.js](https://js.tensorflow.org/api/latest/#Training-Optimizers)
+- Set number of epochs to train for
 - Training automatically stops when the loss (MSE) reaches 0.001
+
+## Potential Features
+
+- Vizualize loss with giant Matrix style rectangle that shrinks with the loss
+  - Code written for this (index.html Line 61) but design is bothersome
+- Turn visualization of neural network output into a plane instead of points
+  - No native method in A-frame, would have to [borow from Three.js](https://stackoverflow.com/questions/51396623/draw-a-curve-using-multi-plane-in-a-frame-and-three-js)
+- Add VR UI to adjust these parameters from a VR controller
+  - Don't own a VR headset currently so I can't test it

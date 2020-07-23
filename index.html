@@ -13,6 +13,7 @@
     <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Mono" rel="stylesheet">
   </head>  
   <body>
+    <!-- 2D User Interface -->
     <div class="settings" id="demo-content">
       <div class="input-container formula">
         <b>Secret formula: </b>
@@ -49,6 +50,7 @@
       </div>
       <button onclick="doALearning()" id="iteration_counter">Learn!</button>
     </div>
+    <!--     A-frame Scene -->
     <a-scene>
       <a-entity camera look-controls orbit-controls="target: 0 0 0; minDistance: 1; maxDistance: 8; initialPosition: 3 2 4"></a-entity>
       <a-entity class="graphtrain"></a-entity>
@@ -58,7 +60,7 @@
       <a-entity id="zaxis" geometry="" scale="2 0.03 0.03" material="color: #fff"></a-entity>
       <a-entity text__zaxis="align: center; side: double; value: Z-Axis" scale="8 8 8" position="0 1.5 0"></a-entity>
       <a-sky color="#bfd3d4"></a-sky>
-<!--       <a-entity id="loss" position="-2 2 -2" geometry="primitive:box" material="" rotation="90 45 0"></a-entity> -->
+      <!-- <a-entity id="loss" position="-2 2 -2" geometry="primitive:box" material="" rotation="90 45 0"></a-entity> -->
     </a-scene>
   </body>
 </html>
