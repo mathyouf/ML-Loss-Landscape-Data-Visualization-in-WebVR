@@ -4,6 +4,8 @@ A-frame implementation of 3D plane fitting using Tensorflow.js.
 
 Inspired by the 2D [hello tensorflow](https://glitch.com/edit/#!/hello-tensorflow) project by [Monica Dinculescu](https://glitch.com/@notwaldorf)💖
 
+![](https://cdn.glitch.com/14005730-e5aa-4eb2-aee8-a0db53f04d46%2Ftfjs.JPG?v=1595904617081)
+
 ## Features
 
 - Adjust each x and z values in plane constructed by `x + x^2 + z + z^2`
